@@ -1,0 +1,4 @@
+SERVER_PORT=8765
+CONNECTION_STRING = postgres:///stock_tracker
+FINNHUB_API_KEY = 
+
