@@ -8,7 +8,20 @@ const api_key = finnhub.ApiClient.instance.authentications['api_key'];
 api_key.apiKey = FINNHUB_API_KEY
 const finnhubClient = new finnhub.DefaultApi
 
+const calculateGainLoss = (quote, cost) => {
+    var unroundedVal = 0
+    if(cost === 0 || quote === 0){
+        unroundedVal = 0.0
+    } else if(quote > cost){
+        unroundedVal = quote / cost * 100
+    } else {
+        unroundedVal = (1 - quote / cost) * -100
+    }
+    return Math.round(unroundedVal * 10) / 10
+}
+
 module.exports = {
+    
     ping: (req, res) => {
         const desc = req.query.desc ? req.query.desc : "none_provided"
         sequelize.query(`insert into ping (description, time) values ('${desc}', now());`)
@@ -58,10 +71,10 @@ module.exports = {
         })
     },
     register: (req, res) => {
-        const {username, password} = req.body
+        const {username, password, firstname, lastname} = req.body
         
-        sequelize.query(`insert into appuser (username, passhash, created) 
-        values ('${username}', '${username}', now());`)
+        sequelize.query(`insert into appuser (username, passhash, firstname, lastname, created) 
+        values ('${username}', '${username}', '${firstname}', '${lastname}', now());`)
             .then(dbRes2 => {
                 res.status(200).send({username: username, success: true})
             })        
@@ -70,7 +83,7 @@ module.exports = {
     login: (req, res) => {
         const {username, password} = req.body
         try{
-            sequelize.query(`select id, username, created from appuser where username='${username}';`)
+            sequelize.query(`select id, username, firstname, lastname, created from appuser where username='${username}';`)
                 .then(dbRes => {
                     res.status(200).send(dbRes[0][0])
                 })        
@@ -130,7 +143,9 @@ module.exports = {
                                 name: data.name,
                                 count: dbResult.count,
                                 cost: dbResult.cost,
-                                quote: null 
+                                id: dbResult.id,
+                                quote: null,
+                                gainLoss: null
                             }
                             resolve(`${i} : ${data.ticker}`)
                         })
@@ -145,6 +160,8 @@ module.exports = {
                             finnhubClient.quote(curr.ticker, async (error, data, response) => {
                                 //console.log(data)
                                 curr.quote = data.c
+                                curr.gainLoss = calculateGainLoss(curr.quote, curr.cost)
+                                curr.logo = `https://eodhd.com/img/logos/US/${curr.ticker.toLowerCase()}.png`
                                 resolve()
                             })
                         }))
@@ -156,11 +173,10 @@ module.exports = {
                 // console.log({promises : promises.length})
             })        
             .catch(err => console.log(err))
+
+            
     },
-
-
-
-
+    
 
 
 
