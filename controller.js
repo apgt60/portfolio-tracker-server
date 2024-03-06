@@ -145,7 +145,8 @@ module.exports = {
                                 cost: dbResult.cost,
                                 id: dbResult.id,
                                 quote: null,
-                                gainLoss: null
+                                gainLoss: null,
+                                altLogo: null
                             }
                             resolve(`${i} : ${data.ticker}`)
                         })
@@ -162,6 +163,7 @@ module.exports = {
                                 curr.quote = data.c
                                 curr.gainLoss = calculateGainLoss(curr.quote, curr.cost)
                                 curr.logo = `https://eodhd.com/img/logos/US/${curr.ticker.toLowerCase()}.png`
+                                curr.altLogo = `https://eodhd.com/img/logos/US/${curr.ticker.toUpperCase()}.png`
                                 resolve()
                             })
                         }))
