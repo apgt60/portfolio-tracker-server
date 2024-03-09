@@ -13,7 +13,7 @@ const calculateGainLoss = (quote, cost) => {
     if(cost === 0 || quote === 0){
         unroundedVal = 0.0
     } else if(quote > cost){
-        unroundedVal = quote / cost * 100
+        unroundedVal = quote / cost * 100 - 100
     } else {
         unroundedVal = (1 - quote / cost) * -100
     }
@@ -114,7 +114,7 @@ module.exports = {
         const {appuser_id} = req.body
         //let tickers = ['aapl', 'meta']
 
-        sequelize.query(`select * from stockwatch where appuser_id=${appuser_id};`)
+        sequelize.query(`select * from stockwatch where appuser_id=${appuser_id} order by id;`)
             .then(dbRes => {
                 const dbResults = dbRes[0]
                 let watches = [dbResults.length]
