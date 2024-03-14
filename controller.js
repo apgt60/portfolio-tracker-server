@@ -146,7 +146,10 @@ module.exports = {
                                 id: dbResult.id,
                                 quote: null,
                                 gainLoss: null,
-                                altLogo: null
+                                altLogo: null,
+                                totalAmount: null,
+                                totalCost: null,
+                                totalGainLoss: null
                             }
                             resolve(`${i} : ${data.ticker}`)
                         })
@@ -164,6 +167,9 @@ module.exports = {
                                 curr.gainLoss = calculateGainLoss(curr.quote, curr.cost)
                                 curr.logo = `https://eodhd.com/img/logos/US/${curr.ticker.toLowerCase()}.png`
                                 curr.altLogo = `https://eodhd.com/img/logos/US/${curr.ticker.toUpperCase()}.png`
+                                curr.totalAmount = curr.quote * curr.count
+                                curr.totalCost = curr.cost * curr.count
+                                curr.totalGainLoss = Math.round((curr.totalAmount - curr.totalCost) * 100) / 100
                                 resolve()
                             })
                         }))
@@ -174,80 +180,6 @@ module.exports = {
                 })
                 // console.log({promises : promises.length})
             })        
-            .catch(err => console.log(err))
-
-            
-    },
-    
-
-
-
-
-
-
-
-    getFileList: (req, res) => {
-        sequelize.query(`select name, description, link, id from file where archived is null;`)
-            .then(dbRes => res.status(200).send(dbRes[0]))
-            .catch(err => console.log(err))
-    },
-    addFile: (req, res) => {
-        const {name, description, link} = req.body
-        
-        sequelize.query(`insert into file (name, description, link) values
-        ('${name}','${description}','${link}') returning *;`)
-            .then(dbRes => {
-                const fileId = dbRes[0][0].id
-                console.log(dbRes)
-                console.log("new file id:", fileId)
-
-                //Add file version 1 in the history table
-                sequelize.query(`insert into history (version, file_id, comment, date_created, link) 
-                values (1,${fileId},'Initial Version', now(), '${link}');`)
-                    .then(dbRes2 => {
-                        res.status(200).send({success: true})
-                    })
-                })                
-            .catch(err => console.log(err))
-
-        //res.status(200).send({success: true})
-    },
-    addVersion: (req, res) => {
-        const {fileId, comment, link} = req.body
-        
-        sequelize.query(`select count(*) from history where file_id=${fileId};`)
-            .then(dbRes => {
-                let version = Number(dbRes[0][0].count) + 1
-                sequelize.query(`insert into history (version, file_id, comment, date_created, link) 
-                values (${version},${fileId},'${comment}', now(), '${link}');`)
-                    .then(dbRes2 => {
-                        //Update file.link to the link of this latest version
-                        sequelize.query(`update file set link='${link}' where id=${fileId};`)
-                        .then(dbRes3 => {
-                            res.status(200).send({success: true})
-                        })
-                    })
-                })
-            .catch(err => console.log(err))
-    },
-    getVersionList: (req, res) => {
-        const fileId = req.params.fileId
-        sequelize.query(`select version, file_id, comment, 
-        date_created, 
-        link from history where file_id=${fileId} order by date_created desc;`)
-            .then(dbRes => {
-                sequelize.query(`select id, name, description, link from 
-                file where id=${fileId};`).then(dbRes2 => {
-                const resbody = {file: dbRes2[0][0], versions: dbRes[0]}
-                res.status(200).send(resbody)})
-                })   
-            .catch(err => console.log(err))
-    },
-    deleteFile: (req, res) => {
-        const fileId = req.params.fileId
-        sequelize.query(`update file set archived=now() where id=${fileId};`)
-            .then(dbRes => {
-                res.status(200).send({success: true})})
-            .catch(err => console.log(err))
+            .catch(err => console.log(err))     
     }
 }
