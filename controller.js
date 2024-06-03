@@ -25,7 +25,8 @@ module.exports = {
     ping: (req, res) => {
         const desc = req.query.desc ? req.query.desc : "none_provided"
         sequelize.query(`insert into ping (description, time) values ('${desc}', now());`)
-            .then(dbRes => res.status(200).send({success: true, description: desc}))
+            .then(dbRes => res.status(200).send({success: true, description: desc, 
+                note: "db connection is active"}))
             .catch(err => console.log(err))
     },
     pingnodb: (req, res) => {
