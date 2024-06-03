@@ -25,8 +25,12 @@ module.exports = {
     ping: (req, res) => {
         const desc = req.query.desc ? req.query.desc : "none_provided"
         sequelize.query(`insert into ping (description, time) values ('${desc}', now());`)
-            .then(dbRes => res.status(200).send({success: true}))
+            .then(dbRes => res.status(200).send({success: true, description: desc}))
             .catch(err => console.log(err))
+    },
+    pingnodb: (req, res) => {
+        const desc = req.query.desc ? req.query.desc : "none_provided"
+        res.status(200).send({success: true, description: desc, note: "no db test performed"})
     },
     quote: (req, res) => {
         const ticker = req.query.ticker
@@ -105,7 +109,7 @@ module.exports = {
             sequelize.query(`insert into stockwatch (ticker, appuser_id, count, cost, created) 
             values ('${ticker}', ${appuser_id}, ${count}, ${cost}, now());`)
                 .then(dbRes2 => {
-                    res.status(200).send({ticker: ticker, cost: cost, success: true})
+                    res.status(200).send({ticker: ticker, count: count, cost: cost, success: true})
                 })        
                 .catch(err => console.log(err))
         })

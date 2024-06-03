@@ -6,6 +6,7 @@ const {SERVER_PORT} = process.env
 const {CONNECTION_STRING} = process.env
 const {
     ping,
+    pingnodb,
     quote,
     profile,
     register,
@@ -26,6 +27,7 @@ app.use(cors())
 
 // ENDPOINTS
 app.get('/api/ping', ping)
+app.get('/api/pingnodb', pingnodb)
 app.get('/api/quote', quote)
 app.get('/api/profile', profile)
 app.post('/api/stockwatches', stockwatches)
