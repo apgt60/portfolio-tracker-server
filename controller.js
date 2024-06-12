@@ -5,6 +5,7 @@ const Sequelize = require('sequelize')
 const sequelize = new Sequelize(CONNECTION_STRING)
 const finnhub = require('finnhub');
 const api_key = finnhub.ApiClient.instance.authentications['api_key'];
+const { v4: uuid } = require('uuid');
 api_key.apiKey = FINNHUB_API_KEY
 const finnhubClient = new finnhub.DefaultApi
 
@@ -24,6 +25,8 @@ module.exports = {
     
     ping: (req, res) => {
         const desc = req.query.desc ? req.query.desc : "none_provided"
+        const newRandomUuid = uuid()
+        console.log(newRandomUuid, newRandomUuid.length)
         sequelize.query(`insert into ping (description, time) values ('${desc}', now());`)
             .then(dbRes => res.status(200).send({success: true, description: desc, 
                 note: "db connection is active"}))
@@ -78,8 +81,8 @@ module.exports = {
     register: (req, res) => {
         const {username, password, firstname, lastname} = req.body
         
-        sequelize.query(`insert into appuser (username, passhash, firstname, lastname, created) 
-        values ('${username}', '${username}', '${firstname}', '${lastname}', now());`)
+        sequelize.query(`insert into appuser (username, passhash, firstname, lastname, created, guid) 
+        values ('${username}', '${username}', '${firstname}', '${lastname}', now(), '${uuid()}');`)
             .then(dbRes2 => {
                 res.status(200).send({username: username, success: true})
             })        
@@ -88,7 +91,7 @@ module.exports = {
     login: (req, res) => {
         const {username, password} = req.body
         try{
-            sequelize.query(`select id, username, firstname, lastname, created from appuser where username='${username}';`)
+            sequelize.query(`select guid, username, firstname, lastname, created from appuser where username='${username}';`)
                 .then(dbRes => {
                     res.status(200).send(dbRes[0][0])
                 })        
@@ -99,7 +102,7 @@ module.exports = {
         }
     },
     addstockwatch:(req, res) => {
-        const {appuser_id, ticker, count, cost} = req.body
+        const {appuser_guid, ticker, count, cost} = req.body
         //check for valid ticker symbol
         finnhubClient.companyProfile2({symbol: ticker}, (error, data, response) => {
             if(!data.ticker){
@@ -107,84 +110,113 @@ module.exports = {
                 return
             } 
 
-            sequelize.query(`insert into stockwatch (ticker, appuser_id, count, cost, created) 
-            values ('${ticker}', ${appuser_id}, ${count}, ${cost}, now());`)
-                .then(dbRes2 => {
-                    res.status(200).send({ticker: ticker, count: count, cost: cost, success: true})
-                })        
-                .catch(err => console.log(err))
+            sequelize.query(`select * from appuser where guid='${appuser_guid}';`)
+            .then(dbRes => {
+                const userCount = dbRes.length
+                const dbResults = dbRes[0]
+                const appuser = dbResults[0]
+                const appuser_id = appuser.id
+                if(!userCount == 1){
+                    res.status(400).send({appuser_guid: appuser_guid, error: "invalid appuser_guid", success: false})
+                }
+
+                sequelize.query(`insert into stockwatch (ticker, appuser_id, count, cost, created, guid) 
+                values ('${ticker}', ${appuser_id}, ${count}, ${cost}, now(), '${uuid()}');`)
+                    .then(dbRes2 => {
+                        res.status(200).send({ticker: ticker, count: count, cost: cost, success: true})
+                    })        
+                    .catch(err => console.log(err))
+                })            
         })
     },
     stockwatches: (req, res) => {
-        const {appuser_id} = req.body
+        const {appuser_guid} = req.body
         //let tickers = ['aapl', 'meta']
 
-        sequelize.query(`select * from stockwatch where appuser_id=${appuser_id} order by id;`)
-            .then(dbRes => {
-                const dbResults = dbRes[0]
-                let watches = [dbResults.length]
-                let promises = []
-                
-                /*
-                dbRes: [
-                    {
-                    id: 1,
-                    ticker: 'meta',
-                    appuser_id: 6,
-                    count: 124,
-                    cost: 444.77,
-                    created: 2024-02-27T20:55:21.285Z
-                    }
-                ]
-                */
-                for(let i=0; i < dbResults.length; i++){
-                    const dbResult = dbResults[i]
-                    promises.push(new Promise((resolve) => {
-                        finnhubClient.companyProfile2({symbol: dbResult.ticker}, async (error, data, response) => {
-                            //console.log(data)
-                            watches[i] = {
-                                ticker: data.ticker,
-                                logo: data.logo,
-                                name: data.name,
-                                count: dbResult.count,
-                                cost: dbResult.cost,
-                                id: dbResult.id,
-                                quote: null,
-                                gainLoss: null,
-                                altLogo: null,
-                                totalAmount: null,
-                                totalCost: null,
-                                totalGainLoss: null
+        sequelize.query(`select * from appuser where guid='${appuser_guid}';`)
+            .then(dbUserRes => {
+                const userCount = dbUserRes.length
+                const dbUserResults = dbUserRes[0]
+                const appuser = dbUserResults[0]
+                const appuser_id = appuser.id
+
+                sequelize.query(`select * from stockwatch where appuser_id=${appuser_id} order by id;`)
+                    .then(dbRes => {
+                        const dbResults = dbRes[0]
+                        let watches = [dbResults.length]
+                        let promises = []
+                        
+                        /*
+                        dbRes: [
+                            {
+                            id: 1,
+                            ticker: 'meta',
+                            appuser_id: 6,
+                            count: 124,
+                            cost: 444.77,
+                            created: 2024-02-27T20:55:21.285Z
                             }
-                            resolve(`${i} : ${data.ticker}`)
-                        })
-                    })
-                    )
-                }
-
-                Promise.all(promises).then(() => {
-                    let promises2 = []
-                    watches.forEach((curr) => {
-                        promises2.push(new Promise((resolve) => {
-                            finnhubClient.quote(curr.ticker, async (error, data, response) => {
-                                //console.log(data)
-                                curr.quote = data.c
-                                curr.gainLoss = calculateGainLoss(curr.quote, curr.cost)
-                                curr.logo = `https://eodhd.com/img/logos/US/${curr.ticker.toLowerCase()}.png`
-                                curr.altLogo = `https://eodhd.com/img/logos/US/${curr.ticker.toUpperCase()}.png`
-                                curr.totalAmount = curr.quote * curr.count
-                                curr.totalCost = curr.cost * curr.count
-                                curr.totalGainLoss = Math.round((curr.totalAmount - curr.totalCost) * 100) / 100
-                                resolve()
+                        ]
+                        */
+                        for(let i=0; i < dbResults.length; i++){
+                            const dbResult = dbResults[i]
+                            promises.push(new Promise((resolve) => {
+                                finnhubClient.companyProfile2({symbol: dbResult.ticker}, async (error, data, response) => {
+                                    //console.log(data)
+                                    watches[i] = {
+                                        ticker: data.ticker,
+                                        logo: data.logo,
+                                        name: data.name,
+                                        count: dbResult.count,
+                                        cost: dbResult.cost,
+                                        id: dbResult.id,
+                                        guid: dbResult.guid,
+                                        quote: null,
+                                        gainLoss: null,
+                                        altLogo: null,
+                                        totalAmount: null,
+                                        totalCost: null,
+                                        totalGainLoss: null
+                                    }
+                                    resolve(`${i} : ${data.ticker}`)
+                                })
                             })
-                        }))
-                    })
+                            )
+                        }
 
-                    Promise.all(promises2).then(() => res.status(200).send({success: true, watches: watches}))
-                    
-                })
-                // console.log({promises : promises.length})
-            })        
-            .catch(err => console.log(err))     
+                        Promise.all(promises).then(() => {
+                            let promises2 = []
+                            watches.forEach((curr) => {
+                                promises2.push(new Promise((resolve) => {
+                                    finnhubClient.quote(curr.ticker, async (error, data, response) => {
+                                        //console.log(data)
+                                        curr.quote = data.c
+                                        curr.gainLoss = calculateGainLoss(curr.quote, curr.cost)
+                                        curr.logo = `https://eodhd.com/img/logos/US/${curr.ticker.toLowerCase()}.png`
+                                        curr.altLogo = `https://eodhd.com/img/logos/US/${curr.ticker.toUpperCase()}.png`
+                                        curr.totalAmount = curr.quote * curr.count
+                                        curr.totalCost = curr.cost * curr.count
+                                        curr.totalGainLoss = Math.round((curr.totalAmount - curr.totalCost) * 100) / 100
+                                        resolve()
+                                    })
+                                }))
+                            })
+
+                            Promise.all(promises2).then(() => res.status(200).send({success: true, watches: watches}))
+                            
+                        })
+                        // console.log({promises : promises.length})
+                    })        
+                    .catch(err => console.log(err))
+
+            })
+             
+    },
+    removewatch:(req, res) => {
+        const watchGuid = req.params.watchId
+        sequelize.query(`delete from stockwatch where guid='${watchGuid}';`)
+            .then(dbRes => {
+                res.status(200).send({success: true})})
+            .catch(err => console.log(err))
     }
 }
