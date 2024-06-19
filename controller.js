@@ -1,13 +1,18 @@
 require('dotenv').config()
 const {CONNECTION_STRING} = process.env
 const {FINNHUB_API_KEY} = process.env
+const {JWT_SECRET_KEY} = process.env
 const Sequelize = require('sequelize')
 const sequelize = new Sequelize(CONNECTION_STRING)
 const finnhub = require('finnhub');
 const api_key = finnhub.ApiClient.instance.authentications['api_key'];
 const { v4: uuid } = require('uuid');
+const jwt = require('jsonwebtoken')
 api_key.apiKey = FINNHUB_API_KEY
 const finnhubClient = new finnhub.DefaultApi
+
+
+const FORBIDDEN_RESPONSE = {message: "authentication failed for request"} 
 
 const calculateGainLoss = (quote, cost) => {
     var unroundedVal = 0
@@ -21,8 +26,41 @@ const calculateGainLoss = (quote, cost) => {
     return Math.round(unroundedVal * 10) / 10
 }
 
-module.exports = {
+const getUserFromRequest = (req) => {
+    const token = req.headers['authtoken']
+    console.log("token in:", token)
+    try {
+        return jwt.verify(token, JWT_SECRET_KEY, (err, authData) => {
+            if(err) {
+                console.log("err:", err)
+                return new Promise((resolve) => resolve(null))
+            } else {
+                const userGuid = authData.userGuid
+                console.log("userGuid:", userGuid)
     
+                return new Promise((resolve, reject) => {
+                    try {
+                        sequelize.query(`select guid, id, username, firstname, lastname, created from appuser where guid='${userGuid}';`)
+                            .then(dbRes => {
+                                resolve(dbRes[0][0])
+                            })        
+                    } catch(err) {
+                        console.log("Got a sequelize error")
+                        console.log(err)
+                        resolve(null)         
+                    }
+                })
+            }
+        })
+    } catch (error) {
+        return new Promise(resolve => {
+            resolve(null)
+        })
+    }
+    
+}
+
+module.exports = {
     ping: (req, res) => {
         const desc = req.query.desc ? req.query.desc : "none_provided"
         const newRandomUuid = uuid()
@@ -88,19 +126,6 @@ module.exports = {
             })        
             .catch(err => console.log(err))
     },
-    login: (req, res) => {
-        const {username, password} = req.body
-        try{
-            sequelize.query(`select guid, username, firstname, lastname, created from appuser where username='${username}';`)
-                .then(dbRes => {
-                    res.status(200).send(dbRes[0][0])
-                })        
-        } catch(err) {
-            console.log("Got a sequelze error")
-            console.log(err)
-            res.status(400).send({ error: err })
-        }
-    },
     addstockwatch:(req, res) => {
         const {appuser_guid, ticker, count, cost} = req.body
         //check for valid ticker symbol
@@ -129,11 +154,16 @@ module.exports = {
                 })            
         })
     },
-    stockwatches: (req, res) => {
-        const {appuser_guid} = req.body
-        //let tickers = ['aapl', 'meta']
+    stockwatches: async (req, res) => {
+        const user = await getUserFromRequest(req)
+        console.log("user-00", user)
+        
+        if(!user){
+            res.status(403).json(FORBIDDEN_RESPONSE)
+            return
+        }
 
-        sequelize.query(`select * from appuser where guid='${appuser_guid}';`)
+        sequelize.query(`select * from appuser where guid='${user.guid}';`)
             .then(dbUserRes => {
                 const userCount = dbUserRes.length
                 const dbUserResults = dbUserRes[0]
@@ -205,12 +235,9 @@ module.exports = {
                             Promise.all(promises2).then(() => res.status(200).send({success: true, watches: watches}))
                             
                         })
-                        // console.log({promises : promises.length})
                     })        
                     .catch(err => console.log(err))
-
             })
-             
     },
     removewatch:(req, res) => {
         const watchGuid = req.params.watchId
@@ -218,5 +245,22 @@ module.exports = {
             .then(dbRes => {
                 res.status(200).send({success: true})})
             .catch(err => console.log(err))
+    },
+    login:(req, res) => {
+        const {username, password} = req.body
+        try{
+            sequelize.query(`select guid, username, firstname, lastname, created from appuser where username='${username}';`)
+                .then(dbRes => {
+                    const userGuid = dbRes[0][0].guid
+                    jwt.sign({userGuid : userGuid}, secretkey, (err, token) => {
+                        console.log("token:", token)
+                        res.status(200).send({token: token, user: dbRes[0][0]})
+                    })
+                })        
+        } catch(err) {
+            console.log("Got a sequelze error")
+            console.log(err)
+            res.status(400).send({ error: err })
+        }
     }
 }

@@ -13,7 +13,8 @@ const {
     login,
     addstockwatch,
     stockwatches,
-    removewatch
+    removewatch,
+    jwtlogin
 } = require('./controller.js')
 
 app.use(express.json())
@@ -29,6 +30,7 @@ app.post('/api/register', register)
 app.post('/api/login', login)
 app.post('/api/addstockwatch', addstockwatch)
 app.delete('/api/removewatch/:watchId', removewatch)
+
 
 // OLD ENDPOINTS
 /** 
