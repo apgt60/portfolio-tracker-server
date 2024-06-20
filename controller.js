@@ -74,8 +74,13 @@ module.exports = {
         const desc = req.query.desc ? req.query.desc : "none_provided"
         res.status(200).send({success: true, description: desc, note: "no db test performed"})
     },
-    quote: (req, res) => {
+    quote: async(req, res) => {
         const ticker = req.query.ticker
+        const user = await getUserFromRequest(req)
+        if(!user){
+            res.status(403).json(FORBIDDEN_RESPONSE)
+            return
+        }
         finnhubClient.quote(ticker, (error, data, response) => {
             console.log(data)
             /* Quote {
@@ -91,9 +96,16 @@ module.exports = {
             res.status(200).send({ticker: ticker, quote: data.c})
         })
     },
-    profile: (req, res) => {
+    profile: async(req, res) => {
         const ticker = req.query.ticker
         console.log({ticker: ticker})
+
+        const user = await getUserFromRequest(req)
+        if(!user){
+            res.status(403).json(FORBIDDEN_RESPONSE)
+            return
+        }
+
         // console.log({client: finnhubClient})
         finnhubClient.companyProfile2({symbol: ticker}, (error, data, response) => {
             console.log(data)
@@ -126,8 +138,13 @@ module.exports = {
             })        
             .catch(err => console.log(err))
     },
-    addstockwatch:(req, res) => {
+    addstockwatch:async(req, res) => {
         const {appuser_guid, ticker, count, cost} = req.body
+        const user = await getUserFromRequest(req)
+        if(!user){
+            res.status(403).json(FORBIDDEN_RESPONSE)
+            return
+        }
         //check for valid ticker symbol
         finnhubClient.companyProfile2({symbol: ticker}, (error, data, response) => {
             if(!data.ticker){
@@ -135,24 +152,15 @@ module.exports = {
                 return
             } 
 
-            sequelize.query(`select * from appuser where guid='${appuser_guid}';`)
-            .then(dbRes => {
-                const userCount = dbRes.length
-                const dbResults = dbRes[0]
-                const appuser = dbResults[0]
-                const appuser_id = appuser.id
-                if(!userCount == 1){
-                    res.status(400).send({appuser_guid: appuser_guid, error: "invalid appuser_guid", success: false})
-                }
+            const appuser_id = user.id
 
-                sequelize.query(`insert into stockwatch (ticker, appuser_id, count, cost, created, guid) 
-                values ('${ticker}', ${appuser_id}, ${count}, ${cost}, now(), '${uuid()}');`)
-                    .then(dbRes2 => {
-                        res.status(200).send({ticker: ticker, count: count, cost: cost, success: true})
-                    })        
-                    .catch(err => console.log(err))
-                })            
-        })
+            sequelize.query(`insert into stockwatch (ticker, appuser_id, count, cost, created, guid) 
+            values ('${ticker}', ${appuser_id}, ${count}, ${cost}, now(), '${uuid()}');`)
+                .then(dbRes2 => {
+                    res.status(200).send({ticker: ticker, count: count, cost: cost, success: true})
+                })        
+                .catch(err => console.log(err))
+            })            
     },
     stockwatches: async (req, res) => {
         const user = await getUserFromRequest(req)
@@ -239,9 +247,14 @@ module.exports = {
                     .catch(err => console.log(err))
             })
     },
-    removewatch:(req, res) => {
+    removewatch:async(req, res) => {
+        const user = await getUserFromRequest(req)
+        if(!user){
+            res.status(403).json(FORBIDDEN_RESPONSE)
+            return
+        }
         const watchGuid = req.params.watchId
-        sequelize.query(`delete from stockwatch where guid='${watchGuid}';`)
+        sequelize.query(`delete from stockwatch where guid='${watchGuid}' and appuser_id=${user.id};`)
             .then(dbRes => {
                 res.status(200).send({success: true})})
             .catch(err => console.log(err))
