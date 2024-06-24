@@ -13,8 +13,7 @@ const {
     login,
     addstockwatch,
     stockwatches,
-    removewatch,
-    jwtlogin
+    removewatch
 } = require('./controller.js')
 
 app.use(express.json())

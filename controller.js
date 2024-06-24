@@ -38,7 +38,7 @@ const getUserFromRequest = (req) => {
                 const userGuid = authData.userGuid
                 console.log("userGuid:", userGuid)
     
-                return new Promise((resolve, reject) => {
+                return new Promise((resolve) => {
                     try {
                         sequelize.query(`select guid, id, username, firstname, lastname, created from appuser where guid='${userGuid}';`)
                             .then(dbRes => {
@@ -53,6 +53,7 @@ const getUserFromRequest = (req) => {
             }
         })
     } catch (error) {
+        console.log("error:", error)
         return new Promise(resolve => {
             resolve(null)
         })
@@ -66,7 +67,7 @@ module.exports = {
         const newRandomUuid = uuid()
         console.log(newRandomUuid, newRandomUuid.length)
         sequelize.query(`insert into ping (description, time) values ('${desc}', now());`)
-            .then(dbRes => res.status(200).send({success: true, description: desc, 
+            .then( () => res.status(200).send({success: true, description: desc, 
                 note: "db connection is active"}))
             .catch(err => console.log(err))
     },
@@ -81,7 +82,7 @@ module.exports = {
             res.status(403).json(FORBIDDEN_RESPONSE)
             return
         }
-        finnhubClient.quote(ticker, (error, data, response) => {
+        finnhubClient.quote(ticker, (error, data) => {
             console.log(data)
             /* Quote {
                 o: 185.01,
@@ -107,7 +108,7 @@ module.exports = {
         }
 
         // console.log({client: finnhubClient})
-        finnhubClient.companyProfile2({symbol: ticker}, (error, data, response) => {
+        finnhubClient.companyProfile2({symbol: ticker}, (error, data) => {
             console.log(data)
             /* 
             CompanyProfile2 {
@@ -133,20 +134,20 @@ module.exports = {
         
         sequelize.query(`insert into appuser (username, passhash, firstname, lastname, created, guid) 
         values ('${username}', '${username}', '${firstname}', '${lastname}', now(), '${uuid()}');`)
-            .then(dbRes2 => {
+            .then(() => {
                 res.status(200).send({username: username, success: true})
             })        
             .catch(err => console.log(err))
     },
     addstockwatch:async(req, res) => {
-        const {appuser_guid, ticker, count, cost} = req.body
+        const {ticker, count, cost} = req.body
         const user = await getUserFromRequest(req)
         if(!user){
             res.status(403).json(FORBIDDEN_RESPONSE)
             return
         }
         //check for valid ticker symbol
-        finnhubClient.companyProfile2({symbol: ticker}, (error, data, response) => {
+        finnhubClient.companyProfile2({symbol: ticker}, (error, data) => {
             if(!data.ticker){
                 res.status(400).send({ticker: ticker, error: "invalid ticker symbol", success: false})
                 return
@@ -156,7 +157,7 @@ module.exports = {
 
             sequelize.query(`insert into stockwatch (ticker, appuser_id, count, cost, created, guid) 
             values ('${ticker}', ${appuser_id}, ${count}, ${cost}, now(), '${uuid()}');`)
-                .then(dbRes2 => {
+                .then(() => {
                     res.status(200).send({ticker: ticker, count: count, cost: cost, success: true})
                 })        
                 .catch(err => console.log(err))
@@ -173,7 +174,6 @@ module.exports = {
 
         sequelize.query(`select * from appuser where guid='${user.guid}';`)
             .then(dbUserRes => {
-                const userCount = dbUserRes.length
                 const dbUserResults = dbUserRes[0]
                 const appuser = dbUserResults[0]
                 const appuser_id = appuser.id
@@ -199,7 +199,7 @@ module.exports = {
                         for(let i=0; i < dbResults.length; i++){
                             const dbResult = dbResults[i]
                             promises.push(new Promise((resolve) => {
-                                finnhubClient.companyProfile2({symbol: dbResult.ticker}, async (error, data, response) => {
+                                finnhubClient.companyProfile2({symbol: dbResult.ticker}, async (error, data) => {
                                     //console.log(data)
                                     watches[i] = {
                                         ticker: data.ticker,
@@ -226,7 +226,7 @@ module.exports = {
                             let promises2 = []
                             watches.forEach((curr) => {
                                 promises2.push(new Promise((resolve) => {
-                                    finnhubClient.quote(curr.ticker, async (error, data, response) => {
+                                    finnhubClient.quote(curr.ticker, async (error, data) => {
                                         //console.log(data)
                                         curr.quote = data.c
                                         curr.gainLoss = calculateGainLoss(curr.quote, curr.cost)
@@ -255,7 +255,7 @@ module.exports = {
         }
         const watchGuid = req.params.watchId
         sequelize.query(`delete from stockwatch where guid='${watchGuid}' and appuser_id=${user.id};`)
-            .then(dbRes => {
+            .then(() => {
                 res.status(200).send({success: true})})
             .catch(err => console.log(err))
     },
@@ -265,7 +265,7 @@ module.exports = {
             sequelize.query(`select guid, username, firstname, lastname, created from appuser where username='${username}';`)
                 .then(dbRes => {
                     const userGuid = dbRes[0][0].guid
-                    jwt.sign({userGuid : userGuid}, secretkey, (err, token) => {
+                    jwt.sign({userGuid : userGuid}, this.secretkey, (err, token) => {
                         console.log("token:", token)
                         res.status(200).send({token: token, user: dbRes[0][0]})
                     })
