@@ -18,6 +18,7 @@
   },
   "scripts": {
     "lint": "eslint *.js",
-    "lintfix": "eslint --fix *.js"
+    "lintfix": "eslint --fix *.js",
+    "debug": "nodemon index.js"
   }
 }
