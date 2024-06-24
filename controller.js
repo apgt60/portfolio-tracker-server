@@ -134,10 +134,18 @@ module.exports = {
         
         sequelize.query(`insert into appuser (username, passhash, firstname, lastname, created, guid) 
         values ('${username}', '${username}', '${firstname}', '${lastname}', now(), '${uuid()}');`)
-            .then(() => {
+            .then((dbRes) => {
                 res.status(200).send({username: username, success: true})
             })        
-            .catch(err => console.log(err))
+            .catch(err => {
+                const dberr = err.errors[0]
+                if(dberr.path === "username" && dberr.validatorKey === "not_unique"){
+                    res.status(200).send({username: username, message: "username already in use", success: false})
+                    return
+                }
+                console.log(err)
+                res.status(500).send({message: "Server Error", success: false})
+            })
     },
     addstockwatch:async(req, res) => {
         const {ticker, count, cost} = req.body
