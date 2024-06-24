@@ -10,9 +10,11 @@ const { v4: uuid } = require('uuid');
 const jwt = require('jsonwebtoken')
 api_key.apiKey = FINNHUB_API_KEY
 const finnhubClient = new finnhub.DefaultApi
-
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 const FORBIDDEN_RESPONSE = {message: "authentication failed for request"} 
+const SERVER_ERROR_RESPONSE = {message: "Server Error", success: false}
 
 const calculateGainLoss = (quote, cost) => {
     var unroundedVal = 0
@@ -131,21 +133,31 @@ module.exports = {
     },
     register: (req, res) => {
         const {username, password, firstname, lastname} = req.body
-        
-        sequelize.query(`insert into appuser (username, passhash, firstname, lastname, created, guid) 
-        values ('${username}', '${username}', '${firstname}', '${lastname}', now(), '${uuid()}');`)
-            .then((dbRes) => {
-                res.status(200).send({username: username, success: true})
-            })        
-            .catch(err => {
-                const dberr = err.errors[0]
-                if(dberr.path === "username" && dberr.validatorKey === "not_unique"){
-                    res.status(200).send({username: username, message: "username already in use", success: false})
-                    return
-                }
-                console.log(err)
-                res.status(500).send({message: "Server Error", success: false})
+
+        bcrypt.genSalt(saltRounds, function(err, salt) {
+            bcrypt.hash(password, salt, function(err, hash){
+                sequelize.query(`insert into appuser (username, passhash, firstname, lastname, created, guid) 
+                values ('${username}', '${hash}', '${firstname}', '${lastname}', now(), '${uuid()}');`)
+                .then((dbRes) => {
+                    if(dbRes[1] == 1){
+                        res.status(200).send({username: username, success: true})
+                    } else {
+                        console.log("dbRes-login-err", dbRes)
+                        res.status(500).send(SERVER_ERROR_RESPONSE)
+                    }
+                    
+                })        
+                .catch(err => {
+                    const dberr = err.errors[0]
+                    if(dberr.path === "username" && dberr.validatorKey === "not_unique"){
+                        res.status(200).send({username: username, message: "username already in use", success: false})
+                        return
+                    }
+                    console.log(err)
+                    res.status(500).send(SERVER_ERROR_RESPONSE)
+                })
             })
+        })
     },
     addstockwatch:async(req, res) => {
         const {ticker, count, cost} = req.body
@@ -270,13 +282,35 @@ module.exports = {
     login:(req, res) => {
         const {username, password} = req.body
         try{
-            sequelize.query(`select guid, username, firstname, lastname, created from appuser where username='${username}';`)
+            sequelize.query(`select guid, passhash, username, firstname, lastname, created from appuser where username='${username}';`)
                 .then(dbRes => {
-                    const userGuid = dbRes[0][0].guid
-                    jwt.sign({userGuid : userGuid}, this.secretkey, (err, token) => {
-                        console.log("token:", token)
-                        res.status(200).send({token: token, user: dbRes[0][0]})
-                    })
+                    //user not found
+                    if(dbRes[1].rowCount == 0){
+                        res.status(401).send({message: "invalid credentials"})
+                        return
+                    }
+                    const userRow = dbRes[0][0]
+                    const userGuid = userRow.guid
+                    const passhash = userRow.passhash
+                    bcrypt.compare(password, passhash, function(err, result) {
+                        //password is good
+                        if(result == true){
+                            //create a jwt token user secretkey and send it to client
+                            jwt.sign({userGuid : userGuid}, JWT_SECRET_KEY, (err, token) => {
+                                if(!token){
+                                    console.log("jwtErr:", err)
+                                }
+                                //remove the passhash from the user and send the rest down with the response
+                                var user = {...userRow}
+                                delete user.passhash
+                                res.status(200).send({token: token, user: user})
+                            })
+                        } else {
+                            res.status(401).send({message: "invalid credentials"})
+                        }
+                        
+                    });
+                    
                 })        
         } catch(err) {
             console.log("Got a sequelze error")
