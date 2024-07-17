@@ -201,7 +201,7 @@ module.exports = {
                 sequelize.query(`select * from stockwatch where appuser_id=${appuser_id} order by id;`)
                     .then(dbRes => {
                         const dbResults = dbRes[0]
-                        let watches = [dbResults.length]
+                        let watches = dbResults.length > 0 ? [dbResults.length] : []
                         let promises = []
                         
                         /*
