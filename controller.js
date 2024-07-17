@@ -150,7 +150,7 @@ module.exports = {
                 .catch(err => {
                     const dberr = err.errors[0]
                     if(dberr.path === "username" && dberr.validatorKey === "not_unique"){
-                        res.status(200).send({username: username, message: "username already in use", success: false})
+                        res.status(400).send({username: username, message: "User Name already in use", success: false})
                         return
                     }
                     console.log(err)
