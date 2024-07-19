@@ -27,5 +27,6 @@ CREATE TABLE "stockwatch" (
 
 ALTER TABLE "appuser" ADD "guid" varchar(36) UNIQUE NOT NULL;
 ALTER TABLE "stockwatch" ADD "guid" varchar(36) UNIQUE NOT NULL;
+ALTER TABLE "appuser" ADD "email" varchar(50) UNIQUE NOT NULL;
 
 

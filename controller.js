@@ -132,12 +132,12 @@ module.exports = {
         })
     },
     register: (req, res) => {
-        const {username, password, firstname, lastname} = req.body
+        const {username, password, firstname, lastname, email} = req.body
 
         bcrypt.genSalt(saltRounds, function(err, salt) {
             bcrypt.hash(password, salt, function(err, hash){
-                sequelize.query(`insert into appuser (username, passhash, firstname, lastname, created, guid) 
-                values ('${username}', '${hash}', '${firstname}', '${lastname}', now(), '${uuid()}');`)
+                sequelize.query(`insert into appuser (username, passhash, firstname, lastname, created, guid, email) 
+                values ('${username}', '${hash}', '${firstname}', '${lastname}', now(), '${uuid()}', '${email}');`)
                 .then((dbRes) => {
                     if(dbRes[1] == 1){
                         res.status(200).send({username: username, success: true})
@@ -151,6 +151,10 @@ module.exports = {
                     const dberr = err.errors[0]
                     if(dberr.path === "username" && dberr.validatorKey === "not_unique"){
                         res.status(400).send({username: username, message: "User Name already in use", success: false})
+                        return
+                    }
+                    if(dberr.path === "email" && dberr.validatorKey === "not_unique"){
+                        res.status(400).send({username: username, message: "Email already in use", success: false})
                         return
                     }
                     console.log(err)
