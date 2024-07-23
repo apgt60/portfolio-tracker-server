@@ -286,7 +286,7 @@ module.exports = {
     login:(req, res) => {
         const {username, password} = req.body
         try{
-            sequelize.query(`select guid, passhash, username, firstname, lastname, created from appuser where username='${username}';`)
+            sequelize.query(`select guid, passhash, username, firstname, lastname, created from appuser where username='${username}' or email='${username}';`)
                 .then(dbRes => {
                     //user not found
                     if(dbRes[1].rowCount == 0){
