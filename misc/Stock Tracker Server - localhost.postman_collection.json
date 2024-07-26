@@ -27,10 +27,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8765/api/stockwatches",
+					"raw": "http://{{HOST}}:8765/api/stockwatches",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{HOST}}"
 					],
 					"port": "8765",
 					"path": [
@@ -62,10 +62,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8765/api/addstockwatch",
+					"raw": "http://{{HOST}}:8765/api/addstockwatch",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{HOST}}"
 					],
 					"port": "8765",
 					"path": [
@@ -88,10 +88,10 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8765/api/profile?ticker=meta",
+					"raw": "http://{{HOST}}:8765/api/profile?ticker=meta",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{HOST}}"
 					],
 					"port": "8765",
 					"path": [
@@ -120,9 +120,10 @@
 					}
 				],
 				"url": {
-					"raw": "localhost:8765/api/quote?ticker=tsla",
+					"raw": "http://{{HOST}}:8765/api/quote?ticker=tsla",
+					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{HOST}}"
 					],
 					"port": "8765",
 					"path": [
@@ -151,9 +152,10 @@
 					}
 				],
 				"url": {
-					"raw": "localhost:8765/api/removewatch/c70dc4a3-2ed6-4b18-a540-1b261fadb5b0",
+					"raw": "http://{{HOST}}:8765/api/removewatch/c70dc4a3-2ed6-4b18-a540-1b261fadb5b0",
+					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{HOST}}"
 					],
 					"port": "8765",
 					"path": [
@@ -172,7 +174,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\":\"userT1000b\",\n    \"password\":\"password\",\n    \"firstname\":\"Testy\",\n    \"lastname\":\"Tester\"\n}",
+					"raw": "{\n    \"username\":\"userfromapp008\",\n    \"password\":\"password\",\n    \"firstname\":\"firstname\",\n    \"lastname\":\"lastname\",\n    \"email\":\"email002@email.com\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -180,10 +182,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8765/api/register",
+					"raw": "http://{{HOST}}:8765/api/register",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{HOST}}"
 					],
 					"port": "8765",
 					"path": [
@@ -201,7 +203,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\":\"apatel\",\n    \"password\":\"password\"\n}",
+					"raw": "{\n    \"username\":\"email001@email.com\",\n    \"password\":\"password\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -209,10 +211,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8765/api/login",
+					"raw": "http://{{HOST}}:8765/api/login",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{HOST}}"
 					],
 					"port": "8765",
 					"path": [
@@ -229,9 +231,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8765/api/ping?desc=some desc",
+					"raw": "http://{{HOST}}:8765/api/ping?desc=some desc",
+					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{HOST}}"
 					],
 					"port": "8765",
 					"path": [
@@ -254,9 +257,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8765/api/pingnodb?desc=some desc",
+					"raw": "http://{{HOST}}:8765/api/pingnodb?desc=some desc",
+					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{HOST}}"
 					],
 					"port": "8765",
 					"path": [
