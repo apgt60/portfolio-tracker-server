@@ -1,0 +1,283 @@
+{
+	"info": {
+		"_postman_id": "95190c26-285d-4710-898f-59b5acac065d",
+		"name": "Stock Tracker Server - localhost",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34736393"
+	},
+	"item": [
+		{
+			"name": "Stock Watches - for appuser_id",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "authtoken",
+						"value": "{{USER_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8765/api/stockwatches",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8765",
+					"path": [
+						"api",
+						"stockwatches"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Stock Watch - for appuser_id, ticker, count, cost",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "authtoken",
+						"value": "{{USER_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ticker\":\"tslala\",\n    \"count\": 10,\n    \"cost\":180\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8765/api/addstockwatch",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8765",
+					"path": [
+						"api",
+						"addstockwatch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Stock Profile (Details) - for ticker",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authtoken",
+						"value": "{{USER_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8765/api/profile?ticker=meta",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8765",
+					"path": [
+						"api",
+						"profile"
+					],
+					"query": [
+						{
+							"key": "ticker",
+							"value": "meta"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Price Quote - for ticker",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authtoken",
+						"value": "{{USER_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8765/api/quote?ticker=tsla",
+					"host": [
+						"localhost"
+					],
+					"port": "8765",
+					"path": [
+						"api",
+						"quote"
+					],
+					"query": [
+						{
+							"key": "ticker",
+							"value": "tsla"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Stock Watch - for id",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "authtoken",
+						"value": "{{USER_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8765/api/removewatch/c70dc4a3-2ed6-4b18-a540-1b261fadb5b0",
+					"host": [
+						"localhost"
+					],
+					"port": "8765",
+					"path": [
+						"api",
+						"removewatch",
+						"c70dc4a3-2ed6-4b18-a540-1b261fadb5b0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register New User - for username, password, firstname, lastname",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"userT1000b\",\n    \"password\":\"password\",\n    \"firstname\":\"Testy\",\n    \"lastname\":\"Tester\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8765/api/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8765",
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login - for username, password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"apatel\",\n    \"password\":\"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8765/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8765",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ping",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8765/api/ping?desc=some desc",
+					"host": [
+						"localhost"
+					],
+					"port": "8765",
+					"path": [
+						"api",
+						"ping"
+					],
+					"query": [
+						{
+							"key": "desc",
+							"value": "some desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ping - No Db Connect",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8765/api/pingnodb?desc=some desc",
+					"host": [
+						"localhost"
+					],
+					"port": "8765",
+					"path": [
+						"api",
+						"pingnodb"
+					],
+					"query": [
+						{
+							"key": "desc",
+							"value": "some desc"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "LOCALHOST_TOKEN_userU_002",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyR3VpZCI6IjAyN2E1MDY1LWI3ZWEtNDU4ZS1hNmYxLWExNjdiMzIwYTEzNSIsImlhdCI6MTcxODMwNTkwOX0.ASfVXBOXhH-kh3OX7ntJrqRDdGIPTKxhj0cWBagH0I4"
+		}
+	]
+}
