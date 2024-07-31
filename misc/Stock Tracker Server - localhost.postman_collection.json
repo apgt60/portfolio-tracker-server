@@ -27,8 +27,8 @@
 					}
 				},
 				"url": {
-					"raw": "http://{{HOST}}:8765/api/stockwatches",
-					"protocol": "http",
+					"raw": "{{PROTO}}://{{HOST}}:8765/api/stockwatches",
+					"protocol": "{{PROTO}}",
 					"host": [
 						"{{HOST}}"
 					],
@@ -62,8 +62,8 @@
 					}
 				},
 				"url": {
-					"raw": "http://{{HOST}}:8765/api/addstockwatch",
-					"protocol": "http",
+					"raw": "{{PROTO}}://{{HOST}}:8765/api/addstockwatch",
+					"protocol": "{{PROTO}}",
 					"host": [
 						"{{HOST}}"
 					],
