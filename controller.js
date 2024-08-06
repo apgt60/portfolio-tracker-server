@@ -42,7 +42,7 @@ const getUserFromRequest = (req) => {
     
                 return new Promise((resolve) => {
                     try {
-                        sequelize.query(`select guid, id, username, firstname, lastname, created from appuser where guid='${userGuid}';`)
+                        sequelize.query(`select guid, id, email, firstname, lastname, created from appuser where guid='${userGuid}';`)
                             .then(dbRes => {
                                 resolve(dbRes[0][0])
                             })        
@@ -132,15 +132,15 @@ module.exports = {
         })
     },
     register: (req, res) => {
-        const {username, password, firstname, lastname, email} = req.body
+        const {email, password, firstname, lastname} = req.body
 
         bcrypt.genSalt(saltRounds, function(err, salt) {
             bcrypt.hash(password, salt, function(err, hash){
-                sequelize.query(`insert into appuser (username, passhash, firstname, lastname, created, guid, email) 
-                values ('${username}', '${hash}', '${firstname}', '${lastname}', now(), '${uuid()}', '${email}');`)
+                sequelize.query(`insert into appuser (email, passhash, firstname, lastname, created, guid) 
+                values ('${email}', '${hash}', '${firstname}', '${lastname}', now(), '${uuid()}');`)
                 .then((dbRes) => {
                     if(dbRes[1] == 1){
-                        res.status(200).send({username: username, success: true})
+                        res.status(200).send({email: email, success: true})
                     } else {
                         console.log("dbRes-login-err", dbRes)
                         res.status(500).send(SERVER_ERROR_RESPONSE)
@@ -149,12 +149,8 @@ module.exports = {
                 })        
                 .catch(err => {
                     const dberr = err.errors[0]
-                    if(dberr.path === "username" && dberr.validatorKey === "not_unique"){
-                        res.status(400).send({username: username, message: "User Name already in use", success: false})
-                        return
-                    }
                     if(dberr.path === "email" && dberr.validatorKey === "not_unique"){
-                        res.status(400).send({username: username, message: "Email already in use", success: false})
+                        res.status(400).send({email: email, message: "Email already in use", success: false})
                         return
                     }
                     console.log(err)
@@ -284,9 +280,9 @@ module.exports = {
             .catch(err => console.log(err))
     },
     login:(req, res) => {
-        const {username, password} = req.body
+        const {email, password} = req.body
         try{
-            sequelize.query(`select guid, passhash, username, firstname, lastname, created from appuser where username='${username}' or email='${username}';`)
+            sequelize.query(`select guid, passhash, email, firstname, lastname, created from appuser where email='${email}';`)
                 .then(dbRes => {
                     //user not found
                     if(dbRes[1].rowCount == 0){
