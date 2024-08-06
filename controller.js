@@ -140,7 +140,7 @@ module.exports = {
                 values ('${email}', '${hash}', '${firstname}', '${lastname}', now(), '${uuid()}');`)
                 .then((dbRes) => {
                     if(dbRes[1] == 1){
-                        res.status(200).send({email: email, success: true})
+                        res.status(200).send({email: email, name: `${firstname} ${lastname}`, success: true})
                     } else {
                         console.log("dbRes-login-err", dbRes)
                         res.status(500).send(SERVER_ERROR_RESPONSE)
