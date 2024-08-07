@@ -211,8 +211,8 @@
 					}
 				},
 				"url": {
-					"raw": "http://{{HOST}}:8765/api/login",
-					"protocol": "http",
+					"raw": "{{PROTO}}://{{HOST}}:8765/api/login",
+					"protocol": "{{PROTO}}",
 					"host": [
 						"{{HOST}}"
 					],
