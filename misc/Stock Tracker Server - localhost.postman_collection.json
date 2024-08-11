@@ -27,12 +27,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{PROTO}}://{{HOST}}:8765/api/stockwatches",
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/stockwatches",
 					"protocol": "{{PROTO}}",
 					"host": [
 						"{{HOST}}"
 					],
-					"port": "8765",
+					"port": "{{PORT}}",
 					"path": [
 						"api",
 						"stockwatches"
@@ -54,7 +54,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ticker\":\"tslala\",\n    \"count\": 10,\n    \"cost\":180\n}",
+					"raw": "{\n    \"ticker\":\"AAPL\",\n    \"count\": 10,\n    \"cost\":212\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -62,12 +62,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{PROTO}}://{{HOST}}:8765/api/addstockwatch",
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/addstockwatch",
 					"protocol": "{{PROTO}}",
 					"host": [
 						"{{HOST}}"
 					],
-					"port": "8765",
+					"port": "{{PORT}}",
 					"path": [
 						"api",
 						"addstockwatch"
@@ -88,12 +88,12 @@
 					}
 				],
 				"url": {
-					"raw": "http://{{HOST}}:8765/api/profile?ticker=meta",
-					"protocol": "http",
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/profile?ticker=meta",
+					"protocol": "{{PROTO}}",
 					"host": [
 						"{{HOST}}"
 					],
-					"port": "8765",
+					"port": "{{PORT}}",
 					"path": [
 						"api",
 						"profile"
@@ -120,12 +120,12 @@
 					}
 				],
 				"url": {
-					"raw": "http://{{HOST}}:8765/api/quote?ticker=tsla",
-					"protocol": "http",
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/quote?ticker=tsla",
+					"protocol": "{{PROTO}}",
 					"host": [
 						"{{HOST}}"
 					],
-					"port": "8765",
+					"port": "{{PORT}}",
 					"path": [
 						"api",
 						"quote"
@@ -152,16 +152,16 @@
 					}
 				],
 				"url": {
-					"raw": "http://{{HOST}}:8765/api/removewatch/c70dc4a3-2ed6-4b18-a540-1b261fadb5b0",
-					"protocol": "http",
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/removewatch/2a48762f-ccf2-4d8e-b344-50d514ae2b33",
+					"protocol": "{{PROTO}}",
 					"host": [
 						"{{HOST}}"
 					],
-					"port": "8765",
+					"port": "{{PORT}}",
 					"path": [
 						"api",
 						"removewatch",
-						"c70dc4a3-2ed6-4b18-a540-1b261fadb5b0"
+						"2a48762f-ccf2-4d8e-b344-50d514ae2b33"
 					]
 				}
 			},
@@ -174,7 +174,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\":\"userfromapp008\",\n    \"password\":\"password\",\n    \"firstname\":\"firstname\",\n    \"lastname\":\"lastname\",\n    \"email\":\"email002@email.com\"\n}",
+					"raw": "{\n    \"password\":\"password\",\n    \"firstname\":\"firstname\",\n    \"lastname\":\"lastname\",\n    \"email\":\"email005@email.abc\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -182,12 +182,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://{{HOST}}:8765/api/register",
-					"protocol": "http",
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/register",
+					"protocol": "{{PROTO}}",
 					"host": [
 						"{{HOST}}"
 					],
-					"port": "8765",
+					"port": "{{PORT}}",
 					"path": [
 						"api",
 						"register"
@@ -203,7 +203,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\":\"email001@email.com\",\n    \"password\":\"password\"\n}",
+					"raw": "{\n    \"email\":\"welcome@welk.edu\",\n    \"password\":\"password\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -211,12 +211,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{PROTO}}://{{HOST}}:8765/api/login",
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/login",
 					"protocol": "{{PROTO}}",
 					"host": [
 						"{{HOST}}"
 					],
-					"port": "8765",
+					"port": "{{PORT}}",
 					"path": [
 						"api",
 						"login"
@@ -231,12 +231,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://{{HOST}}:8765/api/ping?desc=some desc",
-					"protocol": "http",
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/ping?desc=some desc",
+					"protocol": "{{PROTO}}",
 					"host": [
 						"{{HOST}}"
 					],
-					"port": "8765",
+					"port": "{{PORT}}",
 					"path": [
 						"api",
 						"ping"
@@ -257,12 +257,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://{{HOST}}:8765/api/pingnodb?desc=some desc",
-					"protocol": "http",
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/pingnodb?desc=some desc",
+					"protocol": "{{PROTO}}",
 					"host": [
 						"{{HOST}}"
 					],
-					"port": "8765",
+					"port": "{{PORT}}",
 					"path": [
 						"api",
 						"pingnodb"
