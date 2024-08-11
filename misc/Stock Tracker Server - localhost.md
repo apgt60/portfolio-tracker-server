@@ -1,6 +1,42 @@
 # Project: Stock Tracker Server - localhost
 
-## End-point: Stock Watches - for appuser_id
+## End-point: Register New User
+### Method: POST
+>```
+>{{PROTO}}://{{HOST}}:{{PORT}}/api/register
+>```
+### Body (**raw**)
+
+```json
+{
+    "password":"password",
+    "firstname":"firstname",
+    "lastname":"lastname",
+    "email":"email005@email.abc"
+}
+```
+
+
+⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
+
+## End-point: Login
+### Method: POST
+>```
+>{{PROTO}}://{{HOST}}:{{PORT}}/api/login
+>```
+### Body (**raw**)
+
+```json
+{
+    "email":"welcome@welk.edu",
+    "password":"password"
+}
+```
+
+
+⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
+
+## End-point: Get Stock Watches
 ### Method: POST
 >```
 >{{PROTO}}://{{HOST}}:{{PORT}}/api/stockwatches
@@ -21,7 +57,7 @@
 
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
-## End-point: Add Stock Watch - for appuser_id, ticker, count, cost
+## End-point: Add Stock Watch
 ### Method: POST
 >```
 >{{PROTO}}://{{HOST}}:{{PORT}}/api/addstockwatch
@@ -46,7 +82,7 @@
 
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
-## End-point: Stock Profile (Details) - for ticker
+## End-point: Get Stock Details
 ### Method: GET
 >```
 >{{PROTO}}://{{HOST}}:{{PORT}}/api/profile?ticker=meta
@@ -68,7 +104,7 @@
 
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
-## End-point: Price Quote - for ticker
+## End-point: Stock Price Quote
 ### Method: GET
 >```
 >{{PROTO}}://{{HOST}}:{{PORT}}/api/quote?ticker=tsla
@@ -90,7 +126,7 @@
 
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
-## End-point: Remove Stock Watch - for id
+## End-point: Remove Stock Watch
 ### Method: DELETE
 >```
 >{{PROTO}}://{{HOST}}:{{PORT}}/api/removewatch/2a48762f-ccf2-4d8e-b344-50d514ae2b33
@@ -105,43 +141,7 @@
 
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
-## End-point: Register New User - for username, password, firstname, lastname
-### Method: POST
->```
->{{PROTO}}://{{HOST}}:{{PORT}}/api/register
->```
-### Body (**raw**)
-
-```json
-{
-    "password":"password",
-    "firstname":"firstname",
-    "lastname":"lastname",
-    "email":"email005@email.abc"
-}
-```
-
-
-⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
-
-## End-point: Login - for username, password
-### Method: POST
->```
->{{PROTO}}://{{HOST}}:{{PORT}}/api/login
->```
-### Body (**raw**)
-
-```json
-{
-    "email":"welcome@welk.edu",
-    "password":"password"
-}
-```
-
-
-⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
-
-## End-point: Ping
+## End-point: Ping - With Db Connect
 ### Method: GET
 >```
 >{{PROTO}}://{{HOST}}:{{PORT}}/api/ping?desc=some desc

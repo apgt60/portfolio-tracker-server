@@ -7,7 +7,65 @@
 	},
 	"item": [
 		{
-			"name": "Stock Watches - for appuser_id",
+			"name": "Register New User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"password\":\"password\",\n    \"firstname\":\"firstname\",\n    \"lastname\":\"lastname\",\n    \"email\":\"email005@email.abc\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/register",
+					"protocol": "{{PROTO}}",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"welcome@welk.edu\",\n    \"password\":\"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/login",
+					"protocol": "{{PROTO}}",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Stock Watches",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -42,7 +100,7 @@
 			"response": []
 		},
 		{
-			"name": "Add Stock Watch - for appuser_id, ticker, count, cost",
+			"name": "Add Stock Watch",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -77,7 +135,7 @@
 			"response": []
 		},
 		{
-			"name": "Stock Profile (Details) - for ticker",
+			"name": "Get Stock Details",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -109,7 +167,7 @@
 			"response": []
 		},
 		{
-			"name": "Price Quote - for ticker",
+			"name": "Stock Price Quote",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -141,7 +199,7 @@
 			"response": []
 		},
 		{
-			"name": "Remove Stock Watch - for id",
+			"name": "Remove Stock Watch",
 			"request": {
 				"method": "DELETE",
 				"header": [
@@ -168,65 +226,7 @@
 			"response": []
 		},
 		{
-			"name": "Register New User - for username, password, firstname, lastname",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"password\":\"password\",\n    \"firstname\":\"firstname\",\n    \"lastname\":\"lastname\",\n    \"email\":\"email005@email.abc\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/register",
-					"protocol": "{{PROTO}}",
-					"host": [
-						"{{HOST}}"
-					],
-					"port": "{{PORT}}",
-					"path": [
-						"api",
-						"register"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Login - for username, password",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"email\":\"welcome@welk.edu\",\n    \"password\":\"password\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/login",
-					"protocol": "{{PROTO}}",
-					"host": [
-						"{{HOST}}"
-					],
-					"port": "{{PORT}}",
-					"path": [
-						"api",
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Ping",
+			"name": "Ping - With Db Connect",
 			"request": {
 				"method": "GET",
 				"header": [],
