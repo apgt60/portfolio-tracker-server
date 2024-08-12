@@ -16,6 +16,27 @@
 }
 ```
 
+### Response Body (**raw**)
+#### HTTP Status 200 - OK
+```json
+{
+    "email": "email005@email.abc",
+    "name": "firstname lastname",
+    "success": true
+}
+```
+
+### Response Body (**raw**)
+#### HTTP Status 400 - Bad Request
+```json
+{
+    "email": "email005@email.abc",
+    "message": "Email already in use",
+    "success": false
+}
+```
+
+
 
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
@@ -28,8 +49,31 @@
 
 ```json
 {
-    "email":"welcome@welk.edu",
+    "email":"welcome@school.edu",
     "password":"password"
+}
+```
+
+### Response Body (**raw**)
+#### HTTP Status 200 - OK
+```json
+{
+     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyR3VpZCI6IjZhYWY1NTAxLTZmZDgtNDk2MC1hOTc3LTU5NDMzOTFiZWY2YiIsImlhdCI6MTcyMzA2ODUyNH0.oqcJwJQjRTExVdNTSpY4DD3SOVAXRrFMTRJ8-05YpNQ",
+    "user": {
+        "guid": "6aaf5501-6fd8-4960-a977-5943391bef6b",
+        "email": "welcome@welk.edu",
+        "firstname": "testa",
+        "lastname": "tests",
+        "created": "2024-08-07T05:40:23.330Z"
+    }
+}
+```
+
+### Response Body (**raw**)
+#### HTTP Status 401 - Unauthorized
+```json
+{
+    "message": "invalid credentials"
 }
 ```
 
@@ -48,10 +92,50 @@
 |authtoken|{{USER_TOKEN}}|
 
 
-### Body (**raw**)
+### Body (**raw**) - None
+
+### Response Body (**raw**)
+#### HTTP Status 200 - OK
 
 ```json
-
+### Response Body (**raw**)
+#### HTTP Status 200 - OK
+```json
+{
+    "success": true,
+    "watches": [
+        {
+            "ticker": "HD",
+            "logo": "https://eodhd.com/img/logos/US/hd.png",
+            "name": "Home Depot Inc",
+            "count": 100,
+            "cost": 150,
+            "id": 55,
+            "guid": "ee6682f1-e46b-403e-9caa-0f49561100bf",
+            "quote": 342.4,
+            "gainLoss": 128.3,
+            "altLogo": "https://eodhd.com/img/logos/US/HD.png",
+            "totalAmount": 34240,
+            "totalCost": 15000,
+            "totalGainLoss": 19240
+        },
+        {
+            "ticker": "TSLA",
+            "logo": "https://eodhd.com/img/logos/US/tsla.png",
+            "name": "Tesla Inc",
+            "count": 100,
+            "cost": 180,
+            "id": 58,
+            "guid": "a7bc1548-acc3-4f8f-87de-e1561b3573c1",
+            "quote": 191.76,
+            "gainLoss": 6.5,
+            "altLogo": "https://eodhd.com/img/logos/US/TSLA.png",
+            "totalAmount": 19176,
+            "totalCost": 18000,
+            "totalGainLoss": 1176
+        }
+    ]
+}
 ```
 
 
@@ -79,6 +163,17 @@
 }
 ```
 
+### Response Body (**raw**)
+#### HTTP Status 200 - OK
+```json
+{
+    "ticker": "AAPL",
+    "count": 10,
+    "cost": 212,
+    "success": true
+}
+```
+
 
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
@@ -99,6 +194,17 @@
 |Param|value|
 |---|---|
 |ticker|meta|
+
+### Response Body (**raw**)
+#### HTTP Status 200 - OK
+```json
+{
+    "ticker": "META",
+    "name": "Meta Platforms Inc",
+    "logo": "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/FB.png"
+}
+```
+
 
 
 
