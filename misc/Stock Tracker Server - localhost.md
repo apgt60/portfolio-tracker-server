@@ -81,7 +81,7 @@
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
 ## End-point: Get Stock Watches
-### Method: POST
+### Method: GET
 >```
 >{{PROTO}}://{{HOST}}:{{PORT}}/api/stockwatches
 >```
@@ -142,7 +142,7 @@
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
 ## End-point: Add Stock Watch
-### Method: POST
+### Method: PUT
 >```
 >{{PROTO}}://{{HOST}}:{{PORT}}/api/addstockwatch
 >```
@@ -180,7 +180,7 @@
 ## End-point: Get Stock Details
 ### Method: GET
 >```
->{{PROTO}}://{{HOST}}:{{PORT}}/api/profile?ticker=meta
+>{{PROTO}}://{{HOST}}:{{PORT}}/api/profile?ticker=<ticker>
 >```
 ### Headers
 
@@ -193,7 +193,7 @@
 
 |Param|value|
 |---|---|
-|ticker|meta|
+|ticker|{{ticker symbol}}|
 
 ### Response Body (**raw**)
 #### HTTP Status 200 - OK
@@ -226,7 +226,16 @@
 
 |Param|value|
 |---|---|
-|ticker|tsla|
+|ticker|{{ticker symbol}}|
+
+### Response Body (**raw**)
+#### HTTP Status 200 - OK
+```json
+{
+    "ticker": "tsla",
+    "quote": 232.1
+}
+```
 
 
 
@@ -235,13 +244,19 @@
 ## End-point: Remove Stock Watch
 ### Method: DELETE
 >```
->{{PROTO}}://{{HOST}}:{{PORT}}/api/removewatch/2a48762f-ccf2-4d8e-b344-50d514ae2b33
+>{{PROTO}}://{{HOST}}:{{PORT}}/api/removewatch/<stock_watch_guid>
 >```
 ### Headers
 
 |Content-Type|Value|
 |---|---|
 |authtoken|{{USER_TOKEN}}|
+
+### Path Params
+
+|Param|value|
+|---|---|
+|stock_watch_guid|{{stock watch guid}}|
 
 
 
@@ -256,7 +271,17 @@
 
 |Param|value|
 |---|---|
-|desc|some desc|
+|desc|a description string to log to the database|
+
+### Response Body (**raw**)
+#### HTTP Status 200 - OK
+```json
+{
+    "success": true,
+    "description": "some desc",
+    "note": "db connection is active"
+}
+```
 
 
 
@@ -272,6 +297,16 @@
 |Param|value|
 |---|---|
 |desc|some desc|
+
+### Response Body (**raw**)
+#### HTTP Status 200 - OK
+```json
+{
+    "success": true,
+    "description": "some desc",
+    "note": "no db test performed"
+}
+```
 
 
 
