@@ -24,10 +24,10 @@ app.get('/api/ping', ping)
 app.get('/api/pingnodb', pingnodb)
 app.get('/api/quote', quote)
 app.get('/api/profile', profile)
-app.post('/api/stockwatches', stockwatches)
+app.get('/api/stockwatches', stockwatches)
 app.post('/api/register', register)
 app.post('/api/login', login)
-app.post('/api/addstockwatch', addstockwatch)
+app.put('/api/addstockwatch', addstockwatch)
 app.delete('/api/removewatch/:watchId', removewatch)
 
 
