@@ -66,8 +66,11 @@
 		},
 		{
 			"name": "Get Stock Watches",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
-				"method": "POST",
+				"method": "GET",
 				"header": [
 					{
 						"key": "authtoken",
@@ -102,7 +105,7 @@
 		{
 			"name": "Add Stock Watch",
 			"request": {
-				"method": "POST",
+				"method": "PUT",
 				"header": [
 					{
 						"key": "authtoken",
@@ -112,7 +115,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ticker\":\"AAPL\",\n    \"count\": 10,\n    \"cost\":212\n}",
+					"raw": "{\n    \"ticker\":\"HD\",\n    \"count\": 10,\n    \"cost\":100\n}",
 					"options": {
 						"raw": {
 							"language": "json"
