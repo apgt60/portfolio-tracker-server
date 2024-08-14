@@ -25,6 +25,9 @@ CREATE TABLE "stockwatch" (
 	CONSTRAINT "Stockwatch_pk" PRIMARY KEY ("id")
 );
 
-
+ALTER TABLE "appuser" ADD "guid" varchar(36) UNIQUE NOT NULL;
+ALTER TABLE "stockwatch" ADD "guid" varchar(36) UNIQUE NOT NULL;
+ALTER TABLE "appuser" ADD "email" varchar(50) UNIQUE NOT NULL;
+ALTER TABLE "appuser" DROP COLUMN "username";
 
 
