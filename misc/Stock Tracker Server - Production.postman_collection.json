@@ -1,0 +1,290 @@
+{
+	"info": {
+		"_postman_id": "1f081e22-dd9c-4058-bf2d-8f2cc9b3064a",
+		"name": "Stock Tracker Server - Production",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34736393"
+	},
+	"item": [
+		{
+			"name": "Register New User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"password\":\"password\",\n    \"firstname\":\"firstname\",\n    \"lastname\":\"lastname\",\n    \"email\":\"email005@email.abc\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/register",
+					"protocol": "{{PROTO}}",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"amit@amit.com\",\n    \"password\":\"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/login",
+					"protocol": "{{PROTO}}",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Stock Watches",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authtoken",
+						"value": "{{USER_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/stockwatches",
+					"protocol": "{{PROTO}}",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"stockwatches"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Stock Watch",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "authtoken",
+						"value": "{{USER_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ticker\":\"HD\",\n    \"count\": 10,\n    \"cost\":100\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/addstockwatch",
+					"protocol": "{{PROTO}}",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"addstockwatch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Stock Details",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authtoken",
+						"value": "{{USER_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/profile?ticker=meta",
+					"protocol": "{{PROTO}}",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"profile"
+					],
+					"query": [
+						{
+							"key": "ticker",
+							"value": "meta"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Stock Price Quote",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authtoken",
+						"value": "{{USER_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/quote?ticker=tsla",
+					"protocol": "{{PROTO}}",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"quote"
+					],
+					"query": [
+						{
+							"key": "ticker",
+							"value": "tsla"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Stock Watch",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "authtoken",
+						"value": "{{USER_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/removewatch/2a48762f-ccf2-4d8e-b344-50d514ae2b33",
+					"protocol": "{{PROTO}}",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"removewatch",
+						"2a48762f-ccf2-4d8e-b344-50d514ae2b33"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ping - With Db Connect",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/ping?desc=some desc",
+					"protocol": "{{PROTO}}",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"ping"
+					],
+					"query": [
+						{
+							"key": "desc",
+							"value": "some desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ping - No Db Connect",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/pingnodb?desc=some desc",
+					"protocol": "{{PROTO}}",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"pingnodb"
+					],
+					"query": [
+						{
+							"key": "desc",
+							"value": "some desc"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "LOCALHOST_TOKEN_userU_002",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyR3VpZCI6IjAyN2E1MDY1LWI3ZWEtNDU4ZS1hNmYxLWExNjdiMzIwYTEzNSIsImlhdCI6MTcxODMwNTkwOX0.ASfVXBOXhH-kh3OX7ntJrqRDdGIPTKxhj0cWBagH0I4"
+		}
+	]
+}
