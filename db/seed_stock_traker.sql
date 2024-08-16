@@ -30,4 +30,11 @@ ALTER TABLE "stockwatch" ADD "guid" varchar(36) UNIQUE NOT NULL;
 ALTER TABLE "appuser" ADD "email" varchar(50) UNIQUE NOT NULL;
 ALTER TABLE "appuser" DROP COLUMN "username";
 
+CREATE TABLE "nyse_stocks" (
+	"id" serial NOT NULL,
+	"ticker" varchar(10) NOT NULL,
+	"name" varchar(250) NOT NULL,
+	CONSTRAINT "Nyse_stocks_pk" PRIMARY KEY ("id")
+);
+
 

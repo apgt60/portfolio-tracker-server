@@ -13,7 +13,8 @@ const {
     login,
     addstockwatch,
     stockwatches,
-    removewatch
+    removewatch,
+    searchByTicker
 } = require('./controller.js')
 
 app.use(express.json())
@@ -25,6 +26,7 @@ app.get('/api/pingnodb', pingnodb)
 app.get('/api/quote', quote)
 app.get('/api/profile', profile)
 app.get('/api/stockwatches', stockwatches)
+app.get('/api/searchbyticker', searchByTicker)
 app.post('/api/register', register)
 app.post('/api/login', login)
 app.put('/api/addstockwatch', addstockwatch)
