@@ -210,6 +210,47 @@
 
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
+## End-point: Search by (parial) stock ticker
+### Method: GET
+>```
+>{{PROTO}}://{{HOST}}:{{PORT}}/api/searchbyticker?text=<searchString>
+>```
+### Headers
+
+|Content-Type|Value|
+|---|---|
+|authtoken|{{USER_TOKEN}}|
+
+
+### Query Params
+
+|Param|value|
+|---|---|
+|searchString|{{partial or full ticker symbol}}|
+
+### Response Body (**raw**)
+#### HTTP Status 200 - OK
+```json
+[
+    {
+        "id": 6402,
+        "ticker": "MET",
+        "name": "MetLife, Inc."
+    },
+    {
+        "id": 6403,
+        "ticker": "MET-A",
+        "name": "Metlife, Inc. Floating Rate Non Cuml Series A"
+    }
+]
+```
+
+
+
+
+
+⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
+
 ## End-point: Stock Price Quote
 ### Method: GET
 >```
