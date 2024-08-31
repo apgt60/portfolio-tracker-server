@@ -330,7 +330,7 @@ module.exports = {
         .then(dbUserRes => {
             const dbUserResults = dbUserRes[0]
             const appuser = dbUserResults[0]
-            res.status(200).send(dbUserResults)
+            res.status(200).send({results: dbUserResults})
         })
         .catch(err => console.log(err))
     }
