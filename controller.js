@@ -317,5 +317,21 @@ module.exports = {
             console.log(err)
             res.status(400).send({ error: err })
         }
+    },
+    searchByTicker:async(req, res) => {
+        const user = await getUserFromRequest(req)
+        if(!user){
+            res.status(403).json(FORBIDDEN_RESPONSE)
+            return
+        }
+        const searchText = req.query.text.toUpperCase()
+        sequelize.query(`select * from nyse_stocks where ticker like '${searchText}%' limit 10;`)
+
+        .then(dbUserRes => {
+            const dbUserResults = dbUserRes[0]
+            const appuser = dbUserResults[0]
+            res.status(200).send({results: dbUserResults})
+        })
+        .catch(err => console.log(err))
     }
 }
