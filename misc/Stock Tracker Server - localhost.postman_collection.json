@@ -170,6 +170,38 @@
 			"response": []
 		},
 		{
+			"name": "Search By Ticker",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authtoken",
+						"value": "{{USER_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/searchbyticker?text=meta",
+					"protocol": "{{PROTO}}",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"searchbyticker"
+					],
+					"query": [
+						{
+							"key": "text",
+							"value": "meta"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Stock Price Quote",
 			"request": {
 				"method": "GET",
