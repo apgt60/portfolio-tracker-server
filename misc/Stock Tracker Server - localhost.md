@@ -231,18 +231,20 @@
 ### Response Body (**raw**)
 #### HTTP Status 200 - OK
 ```json
-[
-    {
-        "id": 6402,
-        "ticker": "MET",
-        "name": "MetLife, Inc."
-    },
-    {
-        "id": 6403,
-        "ticker": "MET-A",
-        "name": "Metlife, Inc. Floating Rate Non Cuml Series A"
-    }
-]
+{
+    "results": [
+        {
+            "id": 6402,
+            "ticker": "MET",
+            "name": "MetLife, Inc."
+        },
+        {
+            "id": 6403,
+            "ticker": "MET-A",
+            "name": "Metlife, Inc. Floating Rate Non Cuml Series A"
+        }
+    ]
+}
 ```
 
 
