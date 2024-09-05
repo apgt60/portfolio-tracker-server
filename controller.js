@@ -328,8 +328,13 @@ module.exports = {
         sequelize.query(`select * from nyse_stocks where ticker like '${searchText}%' limit 10;`)
 
         .then(dbUserRes => {
-            const dbUserResults = dbUserRes[0]
-            const appuser = dbUserResults[0]
+            var dbUserResults = dbUserRes[0]
+            for(let i=0; i<dbUserResults.length; i++){
+                var curr = dbUserResults[i]
+                curr.logo = `https://eodhd.com/img/logos/US/${curr.ticker.toLowerCase()}.png`
+                curr.altLogo = `https://eodhd.com/img/logos/US/${curr.ticker.toUpperCase()}.png`
+                console.log(curr)                        
+            }
             res.status(200).send({results: dbUserResults})
         })
         .catch(err => console.log(err))
