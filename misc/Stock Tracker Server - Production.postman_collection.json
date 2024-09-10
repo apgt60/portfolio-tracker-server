@@ -170,6 +170,38 @@
 			"response": []
 		},
 		{
+			"name": "Search By Ticker",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authToken",
+						"value": "{{USER_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/searchbyticker?text=met",
+					"protocol": "{{PROTO}}",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"searchbyticker"
+					],
+					"query": [
+						{
+							"key": "text",
+							"value": "met"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Stock Price Quote",
 			"request": {
 				"method": "GET",
@@ -234,7 +266,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/ping?desc=some desc",
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/ping?desc=prod test",
 					"protocol": "{{PROTO}}",
 					"host": [
 						"{{HOST}}"
@@ -247,7 +279,7 @@
 					"query": [
 						{
 							"key": "desc",
-							"value": "some desc"
+							"value": "prod test"
 						}
 					]
 				}

@@ -231,18 +231,24 @@
 ### Response Body (**raw**)
 #### HTTP Status 200 - OK
 ```json
-[
-    {
-        "id": 6402,
-        "ticker": "MET",
-        "name": "MetLife, Inc."
-    },
-    {
-        "id": 6403,
-        "ticker": "MET-A",
-        "name": "Metlife, Inc. Floating Rate Non Cuml Series A"
-    }
-]
+{
+    "results": [
+        {
+            "id": 6402,
+            "ticker": "MET",
+            "name": "MetLife, Inc.",
+            "logo": "https://eodhd.com/img/logos/US/met.png",
+            "altLogo": "https://eodhd.com/img/logos/US/MET.png"
+        },
+        {
+            "id": 6403,
+            "ticker": "MET-A",
+            "name": "Metlife, Inc. Floating Rate Non Cuml Series A",
+            "logo": "https://eodhd.com/img/logos/US/met-a.png",
+            "altLogo": "https://eodhd.com/img/logos/US/MET-A.png"
+        }
+    ]
+}
 ```
 
 
