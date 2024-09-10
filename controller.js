@@ -325,7 +325,7 @@ module.exports = {
             return
         }
         const searchText = req.query.text.toUpperCase()
-        sequelize.query(`select * from nyse_stocks where ticker like '${searchText}%' limit 10;`)
+        sequelize.query(`select * from nyse_stocks where ticker ilike '${searchText}%' or name ilike '${searchText}%' limit 20;`)
 
         .then(dbUserRes => {
             var dbUserResults = dbUserRes[0]
