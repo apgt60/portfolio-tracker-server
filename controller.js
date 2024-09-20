@@ -247,7 +247,12 @@ module.exports = {
                             watches.forEach((curr) => {
                                 promises2.push(new Promise((resolve) => {
                                     finnhubClient.quote(curr.ticker, async (error, data) => {
-                                        //console.log(data)
+                                        console.log("data ____________")
+                                        console.log(data)
+                                        if(!data){
+                                            console.log("error ____________")
+                                            console.log(error)
+                                        }
                                         curr.quote = data.c
                                         curr.gainLoss = calculateGainLoss(curr.quote, curr.cost)
                                         curr.logo = `https://eodhd.com/img/logos/US/${curr.ticker.toLowerCase()}.png`
