@@ -252,20 +252,27 @@ module.exports = {
                                         if(!data){
                                             console.log("error ____________")
                                             console.log(error)
+                                            resolve()
+                                        } else {
+                                            curr.quote = data.c
+                                            curr.gainLoss = calculateGainLoss(curr.quote, curr.cost)
+                                            curr.logo = `https://eodhd.com/img/logos/US/${curr.ticker.toLowerCase()}.png`
+                                            curr.altLogo = `https://eodhd.com/img/logos/US/${curr.ticker.toUpperCase()}.png`
+                                            curr.totalAmount = curr.quote * curr.count
+                                            curr.totalCost = curr.cost * curr.count
+                                            curr.totalGainLoss = Math.round((curr.totalAmount - curr.totalCost) * 100) / 100
+                                            resolve()
                                         }
-                                        curr.quote = data.c
-                                        curr.gainLoss = calculateGainLoss(curr.quote, curr.cost)
-                                        curr.logo = `https://eodhd.com/img/logos/US/${curr.ticker.toLowerCase()}.png`
-                                        curr.altLogo = `https://eodhd.com/img/logos/US/${curr.ticker.toUpperCase()}.png`
-                                        curr.totalAmount = curr.quote * curr.count
-                                        curr.totalCost = curr.cost * curr.count
-                                        curr.totalGainLoss = Math.round((curr.totalAmount - curr.totalCost) * 100) / 100
-                                        resolve()
+                                        
                                     })
                                 }))
                             })
 
-                            Promise.all(promises2).then(() => res.status(200).send({success: true, watches: watches}))
+                            Promise.all(promises2).then(() => {
+                                //Filter out results that don't have a valid quote
+                                let watches2 = watches.filter(elem => elem.quote != null)
+                                res.status(200).send({success: true, watches: watches2})
+                            })
                             
                         })
                     })        
