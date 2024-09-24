@@ -222,7 +222,7 @@ module.exports = {
                                 finnhubClient.companyProfile2({symbol: dbResult.ticker}, async (error, data) => {
                                     //console.log(data)
                                     watches[i] = {
-                                        ticker: data.ticker,
+                                        ticker: dbResult.ticker,
                                         logo: data.logo,
                                         name: data.name,
                                         count: dbResult.count,
@@ -268,11 +268,7 @@ module.exports = {
                                 }))
                             })
 
-                            Promise.all(promises2).then(() => {
-                                //Filter out results that don't have a valid quote
-                                let watches2 = watches.filter(elem => elem.quote != null)
-                                res.status(200).send({success: true, watches: watches2})
-                            })
+                            Promise.all(promises2).then(() => res.status(200).send({success: true, watches: watches}))
                             
                         })
                     })        
