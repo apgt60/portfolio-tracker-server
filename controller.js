@@ -222,7 +222,7 @@ module.exports = {
                                 finnhubClient.companyProfile2({symbol: dbResult.ticker}, async (error, data) => {
                                     //console.log(data)
                                     watches[i] = {
-                                        ticker: data.ticker,
+                                        ticker: dbResult.ticker,
                                         logo: data.logo,
                                         name: data.name,
                                         count: dbResult.count,
@@ -247,15 +247,23 @@ module.exports = {
                             watches.forEach((curr) => {
                                 promises2.push(new Promise((resolve) => {
                                     finnhubClient.quote(curr.ticker, async (error, data) => {
-                                        //console.log(data)
-                                        curr.quote = data.c
-                                        curr.gainLoss = calculateGainLoss(curr.quote, curr.cost)
-                                        curr.logo = `https://eodhd.com/img/logos/US/${curr.ticker.toLowerCase()}.png`
-                                        curr.altLogo = `https://eodhd.com/img/logos/US/${curr.ticker.toUpperCase()}.png`
-                                        curr.totalAmount = curr.quote * curr.count
-                                        curr.totalCost = curr.cost * curr.count
-                                        curr.totalGainLoss = Math.round((curr.totalAmount - curr.totalCost) * 100) / 100
-                                        resolve()
+                                        console.log("data ____________")
+                                        console.log(data)
+                                        if(!data){
+                                            console.log("error ____________")
+                                            console.log(error)
+                                            resolve()
+                                        } else {
+                                            curr.quote = data.c
+                                            curr.gainLoss = calculateGainLoss(curr.quote, curr.cost)
+                                            curr.logo = `https://eodhd.com/img/logos/US/${curr.ticker.toLowerCase()}.png`
+                                            curr.altLogo = `https://eodhd.com/img/logos/US/${curr.ticker.toUpperCase()}.png`
+                                            curr.totalAmount = curr.quote * curr.count
+                                            curr.totalCost = curr.cost * curr.count
+                                            curr.totalGainLoss = Math.round((curr.totalAmount - curr.totalCost) * 100) / 100
+                                            resolve()
+                                        }
+                                        
                                     })
                                 }))
                             })
