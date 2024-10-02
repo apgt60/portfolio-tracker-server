@@ -98,9 +98,6 @@
 #### HTTP Status 200 - OK
 
 ```json
-### Response Body (**raw**)
-#### HTTP Status 200 - OK
-```json
 {
     "success": true,
     "watches": [
