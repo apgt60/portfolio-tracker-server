@@ -16,6 +16,17 @@ const saltRounds = 10;
 const FORBIDDEN_RESPONSE = {message: "authentication failed for request"} 
 const SERVER_ERROR_RESPONSE = {message: "Server Error", success: false}
 
+const isRegisterInputOk = (username, password) => {
+    let errors = []
+    if(username.length < 4){
+        errors.push({field: "username", error: "Username must be at least 4 characters long."})
+    }
+    if(password.length < 6){
+        errors.push({field: "password", error: "Password must be at least 6 characters long."})
+    }
+    return errors
+}
+
 const calculateGainLoss = (quote, cost) => {
     var unroundedVal = 0
     if(cost === 0 || quote === 0){
@@ -133,6 +144,13 @@ module.exports = {
     },
     register: (req, res) => {
         const {email, password, firstname, lastname} = req.body
+
+        var errors = isRegisterInputOk(email, password)
+
+        if(errors.length > 0){
+            res.status(400).send({errors : errors, success: false})
+            return
+        }
 
         bcrypt.genSalt(saltRounds, function(err, salt) {
             bcrypt.hash(password, salt, function(err, hash){
