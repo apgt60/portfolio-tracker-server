@@ -16,7 +16,7 @@ const saltRounds = 10;
 const FORBIDDEN_RESPONSE = {message: "authentication failed for request"} 
 const SERVER_ERROR_RESPONSE = {message: "Server Error", success: false}
 
-const isRegisterInputOk = (username, password) => {
+const getRegisterInputErrors = (username, password) => {
     let errors = []
     if(username.length < 4){
         errors.push({field: "username", error: "Username must be at least 4 characters long."})
@@ -145,7 +145,7 @@ module.exports = {
     register: (req, res) => {
         const {email, password, firstname, lastname} = req.body
 
-        var errors = isRegisterInputOk(email, password)
+        var errors = getRegisterInputErrors(email, password)
 
         if(errors.length > 0){
             res.status(400).send({errors : errors, success: false})
