@@ -16,10 +16,16 @@ const saltRounds = 10;
 const FORBIDDEN_RESPONSE = {message: "authentication failed for request"} 
 const SERVER_ERROR_RESPONSE = {message: "Server Error", success: false}
 
+const isValidEmail = (email) => {
+    // Use a regular expression to validate the email format
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return emailRegex.test(email);
+  }
+
 const getRegisterInputErrors = (username, password) => {
     let errors = []
-    if(username.length < 4){
-        errors.push({field: "username", error: "Username must be at least 4 characters long."})
+    if(!isValidEmail(username)){
+        errors.push({field: "username", error: "Email is not valid."})
     }
     if(password.length < 6){
         errors.push({field: "password", error: "Password must be at least 6 characters long."})
@@ -168,7 +174,8 @@ module.exports = {
                 .catch(err => {
                     const dberr = err.errors[0]
                     if(dberr.path === "email" && dberr.validatorKey === "not_unique"){
-                        res.status(400).send({email: email, message: "Email already in use", success: false})
+                        errors.push({field: "username", error: "Email already in use"})
+                        res.status(400).send({errors: errors, success: false})
                         return
                     }
                     console.log(err)
