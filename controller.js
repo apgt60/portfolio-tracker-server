@@ -16,6 +16,23 @@ const saltRounds = 10;
 const FORBIDDEN_RESPONSE = {message: "authentication failed for request"} 
 const SERVER_ERROR_RESPONSE = {message: "Server Error", success: false}
 
+const isValidEmail = (email) => {
+    // Use a regular expression to validate the email format
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return emailRegex.test(email);
+  }
+
+const getRegisterInputErrors = (username, password) => {
+    let errors = []
+    if(!isValidEmail(username)){
+        errors.push({field: "username", error: "Email is not valid."})
+    }
+    if(password.length < 6){
+        errors.push({field: "password", error: "Password must be at least 6 characters long."})
+    }
+    return errors
+}
+
 const calculateGainLoss = (quote, cost) => {
     var unroundedVal = 0
     if(cost === 0 || quote === 0){
@@ -134,6 +151,13 @@ module.exports = {
     register: (req, res) => {
         const {email, password, firstname, lastname} = req.body
 
+        var errors = getRegisterInputErrors(email, password)
+
+        if(errors.length > 0){
+            res.status(400).send({errors : errors, success: false})
+            return
+        }
+
         bcrypt.genSalt(saltRounds, function(err, salt) {
             bcrypt.hash(password, salt, function(err, hash){
                 sequelize.query(`insert into appuser (email, passhash, firstname, lastname, created, guid) 
@@ -150,7 +174,8 @@ module.exports = {
                 .catch(err => {
                     const dberr = err.errors[0]
                     if(dberr.path === "email" && dberr.validatorKey === "not_unique"){
-                        res.status(400).send({email: email, message: "Email already in use", success: false})
+                        errors.push({field: "username", error: "Email already in use"})
+                        res.status(400).send({errors: errors, success: false})
                         return
                     }
                     console.log(err)
