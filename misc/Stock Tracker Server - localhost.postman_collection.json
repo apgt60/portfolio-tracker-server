@@ -36,6 +36,35 @@
 			"response": []
 		},
 		{
+			"name": "Register Duplicate User (Error)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"password\":\"password\",\n    \"firstname\":\"firstname\",\n    \"lastname\":\"lastname\",\n    \"email\":\"email005@email.abc\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/register",
+					"protocol": "{{PROTO}}",
+					"host": [
+						"{{HOST}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Login",
 			"request": {
 				"method": "POST",
@@ -181,7 +210,7 @@
 					}
 				],
 				"url": {
-					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/searchbyticker?text=meta",
+					"raw": "{{PROTO}}://{{HOST}}:{{PORT}}/api/searchbyticker?text=apple",
 					"protocol": "{{PROTO}}",
 					"host": [
 						"{{HOST}}"
@@ -194,7 +223,7 @@
 					"query": [
 						{
 							"key": "text",
-							"value": "meta"
+							"value": "apple"
 						}
 					]
 				}

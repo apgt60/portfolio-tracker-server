@@ -42,7 +42,7 @@ const calculateGainLoss = (quote, cost) => {
     } else {
         unroundedVal = (1 - quote / cost) * -100
     }
-    return Math.round(unroundedVal * 10) / 10
+    return (Math.round(unroundedVal * 10) / 10).toFixed(2)
 }
 
 const getUserFromRequest = (req) => {
@@ -251,7 +251,7 @@ module.exports = {
                                         logo: data.logo,
                                         name: data.name,
                                         count: dbResult.count,
-                                        cost: dbResult.cost,
+                                        cost: dbResult.cost.toFixed(2),
                                         id: dbResult.id,
                                         guid: dbResult.guid,
                                         quote: null,
@@ -283,9 +283,9 @@ module.exports = {
                                             curr.gainLoss = calculateGainLoss(curr.quote, curr.cost)
                                             curr.logo = `https://eodhd.com/img/logos/US/${curr.ticker.toLowerCase()}.png`
                                             curr.altLogo = `https://eodhd.com/img/logos/US/${curr.ticker.toUpperCase()}.png`
-                                            curr.totalAmount = curr.quote * curr.count
-                                            curr.totalCost = curr.cost * curr.count
-                                            curr.totalGainLoss = Math.round((curr.totalAmount - curr.totalCost) * 100) / 100
+                                            curr.totalAmount = (curr.quote * curr.count).toFixed(2)
+                                            curr.totalCost = (curr.cost * curr.count).toFixed(2)
+                                            curr.totalGainLoss = (Math.round((curr.totalAmount - curr.totalCost) * 100) / 100).toFixed(2)
                                             resolve()
                                         }
                                         
